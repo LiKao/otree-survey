@@ -4,11 +4,16 @@ from otree.api import (
 )
 
 
-author = 'Your name here'
+author = 'Tillmann Nett'
 
 doc = """
-Your app description
+Simple app for collecting demographic data.
+
+Definitions for demographic data are taken from a short XML file.
 """
+
+### Read XML definitions:
+
 
 
 class Constants(BaseConstants):
