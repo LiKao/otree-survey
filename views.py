@@ -1,25 +1,16 @@
 from otree.api import Currency as c, currency_range
 from . import models
 from ._builtin import Page, WaitPage
-from .models import Constants
+from .models import Constants, pages
 
 
-class MyPage(Page):
-    pass
+class Demographics(Page):
+    def vars_for_template(self):
+    	page = pages[self.round_numer]
+		return {
+			"title" 	: page.title(),
+			"questions"	: page.questions()
+		}
 
 
-class ResultsWaitPage(WaitPage):
-
-    def after_all_players_arrive(self):
-        pass
-
-
-class Results(Page):
-    pass
-
-
-page_sequence = [
-    MyPage,
-    ResultsWaitPage,
-    Results
-]
+page_sequence = [Demographics]
