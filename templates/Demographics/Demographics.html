@@ -7,15 +7,83 @@
 
 {% block content %}
 
-<!--
-Documentation on how to write a django template here:
-https://docs.djangoproject.com/en/1.8/ref/templates/language/
+{% for q in questions %}
+	{{ q.as_p }}
+{% endfor %}
 
-Bootstrap comes pre-loaded, so you can use any Bootstrap elements:
-http://getbootstrap.com/components/
+{% next_button %}
 
--->
+{% endblock %}
 
-    {% next_button %}
+{% block styles %}
+
+<style type="text/css">
+
+div.question
+{
+	margin-top: 20px;
+	margin-bottom: 50px
+}
+
+table.likert
+{
+	width: 50%;
+    table-layout: fixed;
+}
+
+.likert th
+{
+    text-align: center;
+    font-weight: normal;
+}
+
+.likert td
+{
+    text-align: center;
+}
+
+.question label
+{
+	font-weight: normal;
+}
+
+div.question_content 
+{
+    margin-top: 10px;
+    margin-left: 20px;
+}
+
+[id^=freetext] 
+{
+    margin-top: 10px;
+}
+
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(':input').change(function(){
+        $('[data-freetext]').each(function(){
+            if( $(this).is(":checked") ) {
+                $("#freetext_" + $(this).attr("data-freetext")).collapse( "show" );
+                $("#freetext_" + $(this).attr("data-freetext")).find("input").attr( "required", true );
+            } else {
+                $("#freetext_" + $(this).attr("data-freetext")).collapse( "hide" );
+                $("#freetext_" + $(this).attr("data-freetext")).find("input").attr( "required", false );
+            }
+        })
+    });
+
+    // First call to collapse always shows (even if passed with option "hide")
+    // unless toggle:false is set.
+    // Set this attribute everywhere when the page is loaded.
+    // See: https://github.com/twbs/bootstrap/issues/5859
+    $(document).ready(function() {
+        $('[data-freetext]').each(function(){
+            $("#freetext_" + $(this).attr("data-freetext")).collapse( {'toggle': false} );
+        })
+    });
+</script>
 
 {% endblock %}
