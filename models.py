@@ -282,6 +282,13 @@ class Page(object):
     def questions(self):
         return self._questions
 
+    def __len__(self):
+        return len(self.questions)
+
+    def __iter__(self):
+        return self.questions.__iter__()
+
+
 pages = [Page(p) for p in pdefs.iterfind("page")]
 
 
