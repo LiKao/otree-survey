@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <questions>
-	<page title="Demographische Daten">
+	<page title="Demographische Daten I">
 		<radio variable="Gender">
 			<text>Geschlecht:</text>
 			<choice value="1">Männlich</choice>
@@ -79,7 +79,7 @@
 			<choice value="SchülerIn">SchülerIn</choice>
 			<choice value="StudentIn">StudentIn</choice>
 			<choice value="berufstätig">berufstätig</choice>
-			<choice freetext="" value="Sonstige">Sonstige:</choice>
+			<choice freetext="Bitte Beschäftigung angeben:" value="Sonstige">Sonstige</choice>
 		</button>
 
 		<selection variable="Location">
@@ -100,17 +100,16 @@
 			<choice value="Sachsen-Anhalt">Sachsen-Anhalt</choice>
 			<choice value="Schleswig-Holstein">Schleswig-Holstein</choice>
 			<choice value="Thüringen">Thüringen</choice>
-			<choice value="Ausland" freetext="Wohnort im Ausland (Land, Stadt)">Ich wohne derzeit im Ausland</choice>
+			<choice value="Ausland" freetext="Wohnort im Ausland (Land, Stadt):">Ich wohne derzeit im Ausland</choice>
 		</selection>
 
 		<radio variable="School">
 			<text>Bitte geben Sie Ihren höchsten Schulabschluss an und die Abschlussnote, die Sie dort erreicht haben</text>
-			<note>Bitte geben Sie eine Kommazahl an</note>
 			<choice value="ohne">Ohne allgemeinen Schulabschluss/noch in Schulausbildung</choice>
-			<choice freetext="" value="Hauptschulabschluss">Hauptschulabschluss/Volksschulabschluss oder gleichwertiger Abschluss</choice>
-			<choice freetext="" value="Realschulabschluss">Realschulabschluss/Mittlere Reife oder gleichwertiger Abschluss</choice>
-			<choice freetext="" value="Fachhochschulreife">Fachhochschulreife oder gleichwertiger Abschluss</choice>
-			<choice freetext="" value="Allgemeine Hochschulreife">Allgemeine Hochschulreife oder gleichwertiger Abschluss</choice>
+			<choice freetext="Abschlussnote (Bitte geben Sie eine Kommazahl an):" value="Hauptschulabschluss">Hauptschulabschluss/Volksschulabschluss oder gleichwertiger Abschluss</choice>
+			<choice freetext="Abschlussnote (Bitte geben Sie eine Kommazahl an):" value="Realschulabschluss">Realschulabschluss/Mittlere Reife oder gleichwertiger Abschluss</choice>
+			<choice freetext="Abschlussnote (Bitte geben Sie eine Kommazahl an):" value="Fachhochschulreife">Fachhochschulreife oder gleichwertiger Abschluss</choice>
+			<choice freetext="Abschlussnote (Bitte geben Sie eine Kommazahl an):" value="Allgemeine Hochschulreife">Allgemeine Hochschulreife oder gleichwertiger Abschluss</choice>
 		</radio>
 
 		<radio variable="Degree">
@@ -121,7 +120,7 @@
 			<choice value="Master/Diplom">Master/Diplom</choice>
 			<choice value="Promotion">Promotion</choice>
 			<choice value="Habilitation">Habilitation</choice>
-			<choice value="Sonstige" freetext="">Sonstige:</choice>
+			<choice value="Sonstige" freetext="Bitte geben Sie Ihren Bildungsgrad an:">Sonstiger Abschluss</choice>
 		</radio>
 
 		<selection variable="Religion">
@@ -133,7 +132,7 @@
 			<choice value="buddhistisch">buddhistisch</choice>
 			<choice value="hinduistisch">hinduistisch</choice>
 			<choice value="jüdisch">jüdisch</choice>
-			<choice value="sonstige" freetext="">sonstige</choice>
+			<choice value="sonstige" freetext="Bitte geben Sie Ihre Religion an:">sonstige</choice>
 		</selection>
 
 		<scale variable="Faith">
@@ -195,7 +194,7 @@
 			<choice value="US-amerikanisch">US-amerikanisch</choice>
 			<choice value="ägyptisch">ägyptisch</choice>
 			<choice value="australisch">australisch</choice>
-			<choice value="Sonstige" freetext="">Sonstige</choice>
+			<choice value="Sonstige" freetext="Bitte geben Sie Ihre Nationalität an:">Sonstige</choice>
 		</selection>
 
 		<selection variable="Nationality2">
@@ -234,7 +233,7 @@
 			<choice value="US-amerikanisch">US-amerikanisch</choice>
 			<choice value="ägyptisch">ägyptisch</choice>
 			<choice value="australisch">australisch</choice>
-			<choice value="Sonstige" freetext="">Sonstige</choice>
+			<choice value="Sonstige" freetext="Bitte geben Sie Ihre zweite Nationalität an:">Sonstige</choice>
 		</selection>
 
 		<selection variable="Language">
@@ -272,7 +271,7 @@
 			<choice value="US-amerikanisch">US-amerikanisch</choice>
 			<choice value="ägyptisch">ägyptisch</choice>
 			<choice value="australisch">australisch</choice>
-			<choice value="Sonstige" freetext="">Sonstige</choice>
+			<choice value="Sonstige" freetext="Bitte geben Sie Ihre Muttersprache an:">Sonstige</choice>
 		</selection>
 
 		<selection variable="Language2">
@@ -311,7 +310,7 @@
 			<choice value="US-amerikanisch">US-amerikanisch</choice>
 			<choice value="ägyptisch">ägyptisch</choice>
 			<choice value="australisch">australisch</choice>
-			<choice value="Sonstige" freetext="">Sonstige</choice>
+			<choice value="Sonstige" freetext="Bitte geben Sie Ihre zweite Muttersprache an:">Sonstige</choice>
 		</selection>
 
 		<selection variable="Inhabitants">
@@ -339,7 +338,7 @@
 		</selection>
 	</page>
 
-	<page title="Demographische Daten">
+	<page title="Demographische Daten II">
 		<selection variable="studies">
 			<text>Bitte wählen Sie Ihr Studienfach aus</text>
 			<choice value="Anglistik/Amerikanistik">Anglistik/Amerikanistik</choice>
@@ -387,7 +386,7 @@
 			<choice value="Zahnmedizin">Zahnmedizin</choice>
 			<choice value="Ökologie">Ökologie</choice>
 			<choice value="Volkswirtschaftslehre">Volkswirtschaftslehre</choice>
-			<choice value="Sonstige" freetext="">Sonstige:</choice>
+			<choice value="Sonstige" freetext="Bitte geben Sie Ihr Studienfach an:">Sonstiges</choice>
 		</selection>
 		
 		<radio variable="at_fernuni">
@@ -408,11 +407,11 @@
 			<choice value="Magister">Magister</choice>
 			<choice value="Staatsexamen">Staatsexamen</choice>
 			<choice value="Promotion">Promotion</choice>
-			<choice value="Sonstige" freetext="">Sonstige</choice>
+			<choice value="Sonstige" freetext="Bitte geben Sie den angestrebten Studienabschluss an:">Sonstige</choice>
 		</selection>
 	</page>
 
-	<page title="Demographische Daten">
+	<page title="Demographische Daten III">
 		<selection variable="type_of_occupation">
 			<text>Bitte geben Sie die Art Ihrer Beschäftigung an</text>
 			<choice value="Angestellt/e">Angestellt/e</choice>
@@ -420,14 +419,14 @@
 			<choice value="Beamte/r">Beamte/r</choice>
 			<choice value="Geschäftsführer/in">Geschäftsführer/in</choice>
 			<choice value="Aushilfetätigkeit">Aushilfetätigkeit</choice>
-			<choice value="sonstige" freetext="">sonstige</choice>
+			<choice value="sonstige" freetext="Art der Beschäftigung:">sonstige</choice>
 		</selection>
 
 		<selection variable="parttime">
 			<text>Arbeiten Sie in der oben genannten Beschäftigung in Teil- oder Vollzeit?</text>
 			<choice value="Teilzeit">Teilzeit</choice>
 			<choice value="Vollzeit">Vollzeit</choice>
-			<choice value="Sonstiges" freetext="">Sonstiges</choice>
+			<choice value="Sonstiges" freetext="Sonstiges (Bitte angeben):">Sonstiges</choice>
 		</selection>
 
 		<selection variable="income">
