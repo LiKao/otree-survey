@@ -13,12 +13,25 @@ from .page      import PageDef
 class BaseSurveyPage(Page):
     template_name = "Survey/Survey.html"
 
+    @property
+    def survey(self):
+        return self.__class__.survey
+
+    @property
+    def page(self):
+        return self.survey.page( self.round_number )
+
+
     def vars_for_template(self):
-        page = self.__class__.survey.page( self.round_number )
         return {
-            "title"     : page.title,
-            "questions" : page.questions
+            "title"     : self.page.title,
+            "questions" : self.page.questions
         }
+
+    def before_next_page(self):
+        for question in self.page:
+            vname = question.variable
+            setattr(self.player, vname, self.form.data[vname])
 
 class Survey(object):
     def __init__(self, name, fname):
