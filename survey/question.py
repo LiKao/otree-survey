@@ -1,4 +1,3 @@
-from django import forms
 from django.utils.safestring import mark_safe
 from django.utils.html import format_html
 
@@ -126,7 +125,7 @@ class RadioQuestion(ChoiceQuestion):
         super(RadioQuestion, self).__init__( qdef, question )
 
     def as_form(self, required=""):
-        return forms.RadioForm( self, required=required)
+        return RadioForm( self, required=required)
 
 
 class SelectForm(object):
@@ -166,7 +165,7 @@ class SelectQuestion(ChoiceQuestion):
         super(SelectQuestion, self).__init__( qdef, question )
 
     def as_form(self, required=""):
-        return forms.SelectForm( self, required=required )
+        return SelectForm( self, required=required )
 
 class ButtonForm(object):
 	def __init__(self, buttonq, required=""):
@@ -206,7 +205,7 @@ class ButtonQuestion(ChoiceQuestion):
         super(ButtonQuestion, self).__init__( qdef, question )
 
     def as_form(self, required=""):
-        return forms.ButtonForm( self, required=required )
+        return ButtonForm( self, required=required )
 
 
 class ScaleForm(object):
@@ -265,7 +264,7 @@ class ScaleQuestion(QuestionType):
         return self.points
 
     def as_form(self, required=""):
-        return forms.ScaleForm( self, required=required )
+        return ScaleForm( self, required=required )
 
 
 class TextForm(object):
@@ -283,7 +282,7 @@ class TextQuestion(QuestionType):
         super(TextQuestion, self).__init__( qdef, question )
 
     def as_form(self, required=""):
-        return forms.TextForm( self, required=required )
+        return TextForm( self, required=required )
 
 
 class QuestionForm(object):
@@ -388,4 +387,4 @@ class Question(object):
         return self._variable
 
     def as_p(self):
-        return forms.QuestionForm(self)
+        return QuestionForm(self)
