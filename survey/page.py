@@ -3,7 +3,7 @@ logger = logging.getLogger(__name__)
 
 from .question      import Question
 
-class Page(object):
+class PageDef(object):
     def __init__(self, pdef):
         self._title = pdef.get("title")
         logger.info("Creating page %s" % self.title)
