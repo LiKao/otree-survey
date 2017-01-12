@@ -9,7 +9,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 setup(
     name = 'otree-survey',
     version = '0.1',
-    packages = ['survey'],
+    packages = ['otreesurvey'],
     include_package_data = True,
     license = 'GPLv3',
     description = 'A simple oTree survey app.',

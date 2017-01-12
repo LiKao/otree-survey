@@ -1,1 +1,0 @@
-from survey.survey import Survey
