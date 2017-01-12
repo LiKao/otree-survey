@@ -69,7 +69,7 @@ class ChoiceQuestion(QuestionType):
         self._choices[choice.id] = choice
 
     def parseXml(self, xml):
-        for cdef in xml.iterfind("choice"):
+        for cdef in xml.find("choices").iterfind("choice"):
             if "value" not in cdef.attrib:
                 raise ImproperlyConfigured("Value for choice missing in definitaion at lines %d-%d" %(cdef.start_line_number, cdef.end_line_number))
             
