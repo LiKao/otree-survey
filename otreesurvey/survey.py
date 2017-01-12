@@ -43,17 +43,17 @@ class Survey(object):
         self._pages     = []
         self._pageids   = set()
 
-    def addPageDef(self, page):
-        if self.hasPageDef( page ):
+    def add_pageDef(self, page):
+        if self.has_pageDef( page ):
             raise DuplicatePageError('Page "%s" added multiple times to same survey' % page.title)
 
         self._pageids.add( page.id )
         self._pages.append( page )
 
-        if not page.isInSurvey( self ):
-            page.setsurvey( self )
+        if not page.is_in_survey( self ):
+            page.set_survey( self )
 
-    def hasPageDef(self, page):
+    def has_pageDef(self, page):
         return page.id in self._pageids
 
     @property
@@ -91,7 +91,7 @@ def surveyFromXml(surveyname, xml):
     rv = Survey(surveyname)
     for pdef in xml.iterfind("page"):
         page = pageFromXml( pdef )
-        rv.addPageDef( page )
+        rv.add_pageDef( page )
     return rv
 
 def surveyFromXmlFile(surveyname, filename):
