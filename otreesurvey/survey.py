@@ -42,6 +42,7 @@ class Survey(object):
         self._name      = name
         self._pages     = []
         self._pageids   = set()
+        self._variables = set()
 
     def add_pageDef(self, page):
         if self.has_pageDef( page ):
@@ -53,8 +54,17 @@ class Survey(object):
         if not page.is_in_survey( self ):
             page.set_survey( self )
 
+    def add_variable(self, varname):
+        if self.has_variable( varname ):
+            raise DuplicateVariableError('Duplicate variable "%s" for same survey defined' %(question.variable, self.title))
+
+        self._variables.add( varname )
+
     def has_pageDef(self, page):
         return page.id in self._pageids
+
+    def has_variable(self, varname):
+        return varname in self._variables
 
     @property
     def num_rounds(self):
