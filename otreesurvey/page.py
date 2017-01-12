@@ -13,6 +13,7 @@ class PageDef(object):
         self._title     = title
         self._questions = []
         self._surveys   = set()
+        self._surveyids = set()
         self._variables = set()
 
     @property
@@ -34,9 +35,18 @@ class PageDef(object):
         self._variables.add( question.variable )
         self._questions.append( question )
 
-
     def setsurvey(self, survey):
+        if self.isInSurvey( survey ):
+            raise DuplicateSurveyRegisteredError('Same survey registered multiple times for page "%s"' % self.title)
+        
         self._surveys.add( survey )
+        self._surveyids.add( survey.id )
+
+        if not survey.hasPageDef(self):
+            survey.addPageDef( self )
+
+    def isInSurvey(self, survey):
+        return survey.id in self._surveyids
 
     def __len__(self):
         return len(self._questions)
