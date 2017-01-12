@@ -4,6 +4,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 from .question      import questionFromXml
+from .exceptions    import *
 
 class PageDef(object):
     def __init__(self, title):
@@ -12,6 +13,7 @@ class PageDef(object):
         self._title     = title
         self._questions = []
         self._surveys   = set()
+        self._variables = set()
 
     @property
     def id(self):
@@ -26,7 +28,12 @@ class PageDef(object):
         return self._questions
 
     def addquestion(self, question):
+        if question.variable in self._variables:
+            raise DuplicateVariableError('Duplicate variable "%s" in Page "%s"' %(question.variable, self.title))
+
+        self._variables.add( question.variable )
         self._questions.append( question )
+
 
     def setsurvey(self, survey):
         self._surveys.add( survey )

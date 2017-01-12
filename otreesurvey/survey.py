@@ -7,8 +7,9 @@ from uuid import uuid4
 import logging
 logger = logging.getLogger(__name__)
 
-from .xml       import XmlParse
-from .page      import pageFromXml
+from .xml           import XmlParse
+from .page          import pageFromXml
+from .exceptions    import *
 
 class BaseSurveyPage(Page):
     template_name = "Survey/Survey.html"
@@ -33,8 +34,7 @@ class BaseSurveyPage(Page):
             vname = question.variable
             setattr(self.player, vname, self.form.data[vname])
 
-class DuplicatePageError(ValueError):
-    pass
+
 
 class Survey(object):
     def __init__(self, name):
