@@ -8,7 +8,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 from .xml       import XmlParse
-from .page      import PageDef
+from .page      import pageFromXml
 
 class BaseSurveyPage(Page):
     template_name = "Survey/Survey.html"
@@ -34,11 +34,12 @@ class BaseSurveyPage(Page):
             setattr(self.player, vname, self.form.data[vname])
 
 class Survey(object):
-    def __init__(self, name, fname):
+    def __init__(self, name):
         self._name = name
+        self._pages = []
 
-        pdefs = XmlParse("%s/%s" %(name,fname))
-        self._pages = [PageDef(p) for p in pdefs.iterfind("page")]
+    def addpage(self, page):
+        self._pages.append( page )
 
     @property
     def num_rounds(self):
@@ -65,7 +66,15 @@ class Survey(object):
         page_cls = type("SurveyPage", (BaseSurveyPage,), page_attrs)
         return page_cls
 
+# TODO: Currently, if we want to add additional structures, we have an NxM situation here
+# Solution: Make the construction independent from the parsing using a visitor pattern
+def surveyFromXml(surveyname, xml):
+    rv = Survey(surveyname)
+    for pdef in xml.iterfind("page"):
+        page = pageFromXml( pdef )
+        rv.addpage( page )
+    return rv
 
-
-
-
+def surveyFromXmlFile(surveyname, filename):
+    xml = XmlParse("%s/%s" % (surveyname, filename))
+    return surveyFromXml(surveyname, xml)
