@@ -33,13 +33,23 @@ class BaseSurveyPage(Page):
             vname = question.variable
             setattr(self.player, vname, self.form.data[vname])
 
+class DuplicatePageError(ValueError):
+    pass
+
 class Survey(object):
     def __init__(self, name):
-        self._name = name
-        self._pages = []
+        self._id        = uuid4().hex    
+        self._name      = name
+        self._pages     = []
+        self._pageids   = set()
 
     def addpage(self, page):
+        if page.id in self._pageids:
+            raise DuplicatePageError('Page "%s" added multiple times to same survey' % page.title)
+
+        self._pageids.add( page.id )
         self._pages.append( page )
+        page.setsurvey( self )
 
     @property
     def num_rounds(self):

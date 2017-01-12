@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 import logging
 logger = logging.getLogger(__name__)
 
@@ -5,9 +7,15 @@ from .question      import questionFromXml
 
 class PageDef(object):
     def __init__(self, title):
-        self._title = title
-        logger.info('Creating page "%s"' % self._title)
+        logger.info('Creating survey page "%s"' % title)
+        self._id        = uuid4().hex
+        self._title     = title
         self._questions = []
+        self._surveys   = set()
+
+    @property
+    def id(self):
+        return self._id
 
     @property
     def title(self):
@@ -19,6 +27,9 @@ class PageDef(object):
 
     def addquestion(self, question):
         self._questions.append( question )
+
+    def setsurvey(self, survey):
+        self._surveys.add( survey )
 
     def __len__(self):
         return len(self._questions)
