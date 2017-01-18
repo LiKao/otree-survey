@@ -114,6 +114,7 @@ class Question(object):
 
     def addFollowup(self, followup):
         self._followups.append( followup )
+        followup.setParent( self )
 
     @property
     def followups(self):
@@ -126,26 +127,92 @@ class Question(object):
         return QuestionForm(self)
 
 class Followup(object):
-    def __init__(self):
+    def __init__(self, value):
+        self._value     = value
         self._questions = []
+        self._parent    = None
+        self._id        = uuid4().hex
 
     def as_p(self):
         output = []
-        output.append( '<div class="followup">' )
+        output.append( format_html('<div class="followup" id="followup_{}" data-followup-variable="{}" >', self.id, self.parent.variable) )
         output.append( '<div class="collapse">')
         for question in self._questions:
             output.append( str(question.as_p()) )
         output.append( '</div>' )
         output.append( '</div>' )
 
+        output.append( '<script>')
+        output.append( """
+            $("[name='{0}']").change(function(e){{
+                div = $("#followup_{2}").children("div")
+                if( $(this).val() == "{1}") {{
+                    div.collapse("show");
+                    // Check which ones we have to reactivate now.
+                    div.find("[data-followup-required='{2}']").attr("required", true);
+                }} else {{
+                    div.collapse("hide");
+                    // We are hiding it. We need to remove all required attributes.
+                    // since we are not limiting the check to anything,
+                    // this will both remove this one as well as all further
+                    // followups
+                    div.find("[required]").attr("required", false);
+                }}
+            }});""".format(self.parent.variable, self.value, self.id))
+
+        output.append("""
+            $(document).ready(function() {{
+                div = $("#followup_{0}").children("div");
+                // First call to collapse always shows (even if passed with option "hide")
+                // unless toggle:false is set.
+                // Set this attribute everywhere when the page is loaded.
+                // See: https://github.com/twbs/bootstrap/issues/5859
+                div.collapse( {{'toggle': false}});
+                
+                // Currently we assume that the fields are hidden
+                // for these fields, there must not be any "required"
+                // attribute, because participants cannot enter anything
+                // here.
+                requireds = div.find("[required]");
+                // We need to know when we have to restore the "required"
+                // attribute.
+                // Since document.ready is called in order of registration,
+                // all follow ups below this one will already have been
+                // deleted. Therefore, we can just register this question
+                // id as a trigger for reactivating the required attribute
+                requireds.attr("data-followup-required", "{0}");
+                requireds.attr("required", false);
+            }});""".format( self.id ) )
+
+        output.append( '</script>')
+
         return mark_safe("\n".join( output ))
 
     def addQuestion(self, question):
         self._questions.append(question)
 
+    def setParent(self, question):
+        self._parent = question
+
+    @property
+    def value(self):
+        return self._value
+
+    @property
+    def id(self):
+        return self._id
+
+    @property
+    def parent(self):
+        return self._parent
+
 
 def followupFromXml(xml):
-    rv = Followup()
+    if "value" not in xml.attrib:
+        raise ImproperlyConfigured("Follow up is missing value definition in lines %d-%d" %(xml.start_line_number, xml.end_line_number) )
+
+    value = xml.get("value")
+    rv = Followup( value )
     for qdef in xml:
         rv.addQuestion( questionFromXml(qdef) )
     return rv
