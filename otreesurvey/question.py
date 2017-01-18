@@ -22,7 +22,8 @@ class QuestionForm(object):
     def _html_out(self):
         output = []
         output.append('<div class="question">')
-        output.append(format_html("<h4>{}</h4>", self.question.text))
+        if self.question.has_text():
+            output.append(format_html("<h4>{}</h4>", self.question.text))
 
         if self.question.has_note():
             output.append(format_html("<span>{}</span><br>", self.question.note))
@@ -37,7 +38,7 @@ class QuestionForm(object):
         return self._html_out()
 
 class Question(object):
-    def __init__(self, variable, qtype, text, note = None, optional = False):
+    def __init__(self, variable, qtype, text = None, note = None, optional = False):
         self._variable      = variable
         self._type          = qtype
         self._text          = text
@@ -65,9 +66,16 @@ class Question(object):
     def typehandler(self):
         return self._typehandler
 
+    def has_text(self):
+        return self._text is not None
+
     @property
     def text(self):
         return self._text
+
+    @text.setter
+    def text(self, value):
+        self._text = value
 
     def has_note(self):
         return self._note is not None
@@ -101,10 +109,6 @@ def questionFromXml(xml):
     variable    = xml.get("variable")
     qtype       = xml.tag.lower()
     text        = xml.findtext("text")
-
-    if text is None:
-        raise ImproperlyConfigured("No text for Question definition in lines %d-%d" %(xml.start_line_number, xml.end_line_number) )
-
     note        = xml.findtext("note")
     optional    = bool(xml.findtext("optional", False))
 
