@@ -32,6 +32,9 @@ class QuestionForm(object):
         output.append("</div>")
         output.append("</div>")
 
+        for q in self._question.followups:
+            output.append( str(q.as_p()) )
+
         return mark_safe("\n".join( output ))
 
     def __str__(self):
@@ -46,6 +49,7 @@ class Question(object):
         self._optional      = optional
         self._typehandler   = QuestionType.create( self.type, self )
         self._htmlid        = None
+        self._followups     = []
   
     def render_question(self):
         if self._optional:
@@ -108,11 +112,43 @@ class Question(object):
     def optional(self, value):
         self._optional = value
 
+    def addFollowup(self, followup):
+        self._followups.append( followup )
+
+    @property
+    def followups(self):
+        return self._followups
+
     def __str__(self):
         return self._variable
 
     def as_p(self):
         return QuestionForm(self)
+
+class Followup(object):
+    def __init__(self):
+        self._questions = []
+
+    def as_p(self):
+        output = []
+        output.append( '<div class="followup">' )
+        output.append( '<div class="collapse">')
+        for question in self._questions:
+            output.append( str(question.as_p()) )
+        output.append( '</div>' )
+        output.append( '</div>' )
+
+        return mark_safe("\n".join( output ))
+
+    def addQuestion(self, question):
+        self._questions.append(question)
+
+
+def followupFromXml(xml):
+    rv = Followup()
+    for qdef in xml:
+        rv.addQuestion( questionFromXml(qdef) )
+    return rv
 
 def questionFromXml(xml):
     if "variable" not in xml.attrib:
@@ -128,6 +164,9 @@ def questionFromXml(xml):
         rv = Question(variable, qtype, text, note, optional)
     except QuestionTypeUndefined as e:
         raise ImproperlyConfigured('Question type "%s" not defined in lines %d-%d' %(e.type, xml.start_line_number, xml.end_line_number))
+    
+    for fdef in xml.iterfind("followup"):
+        rv.addFollowup( followupFromXml(fdef) )
 
     rv.typehandler.parseXml( xml )
 
