@@ -45,6 +45,7 @@ class Question(object):
         self._note          = note
         self._optional      = optional
         self._typehandler   = QuestionType.create( self.type, self )
+        self._htmlid        = None
   
     def render_question(self):
         if self._optional:
@@ -53,6 +54,17 @@ class Question(object):
             required = "required"
 
         return str( self.typehandler.as_form( required ) )
+
+    @property
+    def htmlid(self):
+        if self._htmlid is None:
+            return "question_" + self._variable
+        else:
+            return self._htmlid
+
+    @htmlid.setter
+    def htmlid(self, value):
+        self._htmlid = value
 
     @property
     def variable(self):
