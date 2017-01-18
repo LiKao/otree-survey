@@ -74,6 +74,20 @@ class Question(object):
     def variable(self):
         return self._variable
 
+    # Variable only gets the variable for
+    # this one question for identification
+    # purposes.
+    # allVariables will both get the
+    # variables for this question as well
+    # as for any follow up question.
+    def allVariables(self):
+        rv = [ self.variable ]
+        for fup in self.followups:
+            for q in fup.questions:
+                rv.extend( q.allVariables() )
+        return rv
+
+
     @property
     def type(self):
         return self._type
@@ -113,6 +127,7 @@ class Question(object):
         self._optional = value
 
     def addFollowup(self, followup):
+        logger.info('Adding followup for value "{}" on question "{}" '.format(followup.value, self.variable) )
         self._followups.append( followup )
         followup.setParent( self )
 
@@ -137,7 +152,7 @@ class Followup(object):
         output = []
         output.append( format_html('<div class="followup" id="followup_{}" data-followup-variable="{}" >', self.id, self.parent.variable) )
         output.append( '<div class="collapse">')
-        for question in self._questions:
+        for question in self.questions:
             output.append( str(question.as_p()) )
         output.append( '</div>' )
         output.append( '</div>' )
@@ -197,7 +212,12 @@ class Followup(object):
 
         return mark_safe("\n".join( output ))
 
+    @property
+    def questions(self):
+        return self._questions
+
     def addQuestion(self, question):
+        logger.info('Adding question "{}" on followup for value "{}"'.format(question.variable, self.value))
         self._questions.append(question)
 
     def setParent(self, question):

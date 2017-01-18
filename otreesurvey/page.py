@@ -29,14 +29,15 @@ class PageDef(object):
         return self._questions
 
     def add_question(self, question):
-        if question.variable in self._variables:
-            raise DuplicateVariableError('Duplicate variable "%s" in Page "%s"' %(question.variable, self.title))
-
-        self._variables.add( question.variable )
+        logger.info('Adding question "{}" to page "{}"'.format( question.variable, self.title ) )
         self._questions.append( question )
+        for varname in question.allVariables():
+            if varname in self._variables:
+                raise DuplicateVariableError('Duplicate variable "%s" in Page "%s"' %(varname, self.title))
+            self._variables.add( varname )
 
-        for survey in self._surveys:
-            survey.add_variable( question.variable )
+            for survey in self._surveys:
+                survey.add_variable( varname )
 
     def set_survey(self, survey):
         if self.is_in_survey( survey ):
@@ -54,6 +55,10 @@ class PageDef(object):
     def is_in_survey(self, survey):
         return survey.id in self._surveyids
 
+    @property
+    def variables(self):
+        return self._variables
+
     def __len__(self):
         return len( self._questions )
 
@@ -67,7 +72,7 @@ def pageFromXml(xml):
     rv = PageDef( title )
 
     for qdef in xml:
-        question = questionFromXml(qdef)
-        rv.add_question(question)
+        question = questionFromXml( qdef )
+        rv.add_question( question )
 
     return rv
