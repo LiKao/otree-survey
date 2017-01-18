@@ -146,7 +146,16 @@ class Followup(object):
         output.append( """
             $("[name='{0}']").change(function(e){{
                 div = $("#followup_{2}").children("div")
-                if( $(this).val() == "{1}") {{
+                
+                activated = false
+                if( $(this).is(".checkbox_input") ) {{
+                     values = new Set( JSON.parse( $(this).val() ) );
+                     activated = values.has( "{1}" );
+                }} else {{
+                    activated = $(this).val() == "{1}"
+                }}
+
+                if( activated ) {{
                     div.collapse("show");
                     // Check which ones we have to reactivate now.
                     div.find("[data-followup-required='{2}']").attr("required", true);
