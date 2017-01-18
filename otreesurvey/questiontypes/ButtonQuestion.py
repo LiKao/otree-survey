@@ -11,8 +11,9 @@ class ButtonForm(object):
 	def __str__(self):
 		output = []
 		idn = 0
-		for choice in self._buttonq:
-			idn = idn + 1
+		output.append( format_html('<input type="hidden" name="{}" value="[]" class="checkbox_input">', self._buttonq.question.variable) )
+		output.append( format_html('<div id="checkboxes_{}">', self._buttonq.question.variable ))
+		for idn, choice in enumerate( self._buttonq ):
 			idstr = "%s_%d" %(self._buttonq.question.variable, idn)
 			default = ""
 			if choice.default:
@@ -22,9 +23,23 @@ class ButtonForm(object):
 			# if choice.has_freetext():
 			# 	freetext = format_html('data-freetext="{}"', choice.id)
 
-			output.append( format_html('<input type="checkbox" name="{}" value="{}" id="{}" {}>', 
-							self._buttonq.question.variable, choice.value, idstr, default) )
+			output.append( format_html('<input type="checkbox" name="{0}" value="{1}" id="{0}" {2}>', 
+							idstr, choice.value, default) )
 			output.append( format_html('<label for="{}">{}</label><br>', idstr, choice.text))
+		output.append( '</div>' )
+
+		output.append( '<script>' )
+		output.append( """
+			$("#checkboxes_{0} input").change(function(){{
+				cval = new Set( JSON.parse( $("input[name='{0}']").val() ) );
+				if( $(this).is(":checked") ) {{
+					cval.add( $(this).attr("value") );
+				}} else {{
+					cval.delete( $(this).attr("value") );
+				}}		
+				$("input[name='{0}']").val( JSON.stringify( Array.from( cval ) ) ).change();
+			}})""".format( self._buttonq.question.variable))
+		output.append( '</script>' )
 
 		# for choice in self._buttonq:
 		# 	if choice.has_freetext():
