@@ -30,10 +30,9 @@ class BaseSurveyPage(Page):
         }
 
     def before_next_page(self):
-        for question in self.page:
-            vname = question.variable
-            setattr(self.player, vname, self.form.data[vname])
-
+        for varname in self.page.variables:
+            if varname in self.form.data:
+                setattr(self.player, varname, self.form.data[varname])
 
 
 class Survey(object):
@@ -56,7 +55,7 @@ class Survey(object):
 
     def add_variable(self, varname):
         if self.has_variable( varname ):
-            raise DuplicateVariableError('Duplicate variable "%s" for same survey defined' %(question.variable, self.title))
+            raise DuplicateVariableError('Duplicate variable "%s" for same survey defined' %(varname, self.title))
 
         self._variables.add( varname )
 
@@ -81,8 +80,8 @@ class Survey(object):
         model_attrs = {'__module__': self._name + ".models"}
 
         for page in self._pages:
-            for question in page:
-                model_attrs[question.variable] = models.CharField()
+            for varname in page.variables:
+                model_attrs[varname] = models.CharField()
 
         model_cls = type('Player', (BasePlayer,), model_attrs)
         return model_cls
