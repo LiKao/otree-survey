@@ -1,4 +1,5 @@
 from .survey 	import Survey
+from .survey 	import BaseSurveyPage
 from .survey 	import surveyFromXml
 from .survey 	import surveyFromXmlFile
 

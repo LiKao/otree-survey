@@ -14,26 +14,27 @@ from .exceptions    import *
 class BaseSurveyPage(Page):
     template_name = "Survey/Survey.html"
 
+    def get_context_data(self, **kwargs):
+        context = super(BaseSurveyPage, self).get_context_data( **kwargs )
+        context["title"]        = self.page.title
+        context["questions"]    = self.page.questions
+        return context
+
     @property
     def survey(self):
-        return self.__class__.survey
+        # Known reference in Player created by "contribute_to_class"
+        return self.player._survey
 
     @property
     def page(self):
         return self.survey.page( self.round_number )
 
-
-    def vars_for_template(self):
-        return {
-            "title"     : self.page.title,
-            "questions" : self.page.questions
-        }
-
-    def before_next_page(self):
+    def post(self, request, *args, **kwargs):
+        nrv = super(BaseSurveyPage, self).post(request, *args, **kwargs)
         for varname in self.page.variables:
             if varname in self.form.data:
                 setattr(self.player, varname, self.form.data[varname])
-
+        return nrv
 
 class Survey(object):
     def __init__(self, name):
@@ -76,23 +77,16 @@ class Survey(object):
     def page(self, round_number):
         return self._pages[ round_number - 1 ]
 
-    def create_player(self):
-        model_attrs = {'__module__': self._name + ".models"}
-
+    def contribute_to_class( self, cls, name ):
+        setattr(cls, name, self)
+        # We add an additional name at a known place for later reference
+        # in the page.
+        # TODO: Find a better way to get the actual object into Player model
+        setattr(cls, "_survey", self)
         for page in self._pages:
             for varname in page.variables:
-                model_attrs[varname] = models.CharField()
+                models.CharField().contribute_to_class(cls, varname)
 
-        model_cls = type('Player', (BasePlayer,), model_attrs)
-        return model_cls
-
-    def create_page(self):
-        rv = []
-        page_attrs = {'__module__': self._name + ".views"}
-        page_attrs["survey"] = self
-
-        page_cls = type("SurveyPage", (BaseSurveyPage,), page_attrs)
-        return page_cls
 
 # TODO: Currently, if we want to add additional structures, we have an NxM situation here
 # Solution: Make the construction independent from the parsing using a visitor pattern
