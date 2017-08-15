@@ -85,7 +85,7 @@ class Survey(object):
         setattr(cls, "_survey", self)
         for page in self._pages:
             for varname in page.variables:
-                models.CharField().contribute_to_class(cls, varname)
+                models.CharField(max_length=255).contribute_to_class(cls, varname)
 
 
 # TODO: Currently, if we want to add additional structures, we have an NxM situation here
