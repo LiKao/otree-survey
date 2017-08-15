@@ -29,7 +29,7 @@ class BaseSurveyPage(Page):
     def page(self):
         return self.survey.page( self.round_number )
 
-    def post(self, request, *args, **kwargs):
+    def post(self, *args, **kwargs):
         nrv = super(BaseSurveyPage, self).post(request, *args, **kwargs)
         for varname in self.page.variables:
             if varname in self.form.data:
